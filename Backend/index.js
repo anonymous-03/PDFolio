@@ -139,7 +139,7 @@ app.get('/auth/login/google', passport.authenticate('google'));
 app.get('/oauth2/redirect/google',
     passport.authenticate('google', { failureRedirect: '/login', failureMessage: true }),
     function (req, res) {
-        res.redirect(`${process.env.REACT_APP_URL}/auth/callback?token=${req.user.id}`);
+        res.redirect(`${process.env.REACT_APP_URL}/auth/callback`);
     });
 
 app.get('/api/auth/logout',isLoggedIn, asyncWrap(async(req, res, next) => {

@@ -1,34 +1,24 @@
 // components/OAuthCallback.jsx
 import React, { useEffect } from 'react';
-import { useSearchParams, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 
 const OAuthCallback = () => {
-  const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const { handleOAuthCallback } = useAuth();
 
   useEffect(() => {
-    const handleCallback = async () => {
-      const token = searchParams.get('token');
-      const error = searchParams.get('error');
-
-      if (error) {
-        console.error('OAuth error:', error);
-        navigate('/login?error=' + encodeURIComponent(error));
-        return;
-      }
-
-      if (token) {
-        console.log('OAuth token received:', token);
-        await handleOAuthCallback(token);
-      } else {
-        navigate('/login?error=No token received');
+    const handleSessionCheck = async () => {
+      try {
+        await handleOAuthCallback(); // calls /api/auth/me and sets user
+      } catch (err) {
+        console.error('OAuth callback failed:', err);
+        navigate('/login?error=Authentication failed');
       }
     };
 
-    handleCallback();
-  }, [searchParams, navigate, handleOAuthCallback]);
+    handleSessionCheck();
+  }, [handleOAuthCallback, navigate]);
 
   return (
     <div className="flex items-center justify-center min-h-screen">

@@ -1,5 +1,5 @@
 
-import React, { useContext } from 'react';
+// import React, { useContext } from 'react';
 import Navbar from '../components/Landing/Navbar';
 import Hero from '../components/Landing/Hero';
 import Features from '../components/Landing/Features';
@@ -20,10 +20,10 @@ import ThemeSwitcher from '../components/Theme/ThemeSwitcher';
 
 const LandingPage = () => {
 
-  const {toast,setToast}=useContext(ToastContext);
-  const removeToast = (id) => {
-    setToast(prev => prev.filter(toast => toast.id !== id));
-  };
+  // const {toast,setToast}=useContext(ToastContext);
+  // const removeToast = (id) => {
+  //   setToast(prev => prev.filter(toast => toast.id !== id));
+  // };
   return (
     
       <div className="bg-transparent">

@@ -82,7 +82,13 @@ const ResumeUpload = () => {
       formData.append('resume', file);
       const resumeData = await axios.post('/api/upload-resume', formData);
 
-      console.log(resumeData);
+      // console.log(resumeData.data);
+      if(resumeData.data.personalInfo===undefined){
+        alert("Please upload resume again");
+        setUploading(false);
+        navigate('/upload');
+        return;
+      }
 
 
       // Simulate upload delay

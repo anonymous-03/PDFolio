@@ -151,7 +151,7 @@ app.get('/api/auth/logout',isLoggedIn, asyncWrap(async(req, res, next) => {
   });
 }));
 
-app.get("/api/auth/me",isLoggedIn, asyncWrap(async (req, res) => {
+app.get("/api/auth/me",asyncWrap(async (req, res) => {
     if (!req.session.passport) {
         return res.status(401).json({ 'message': 'Not logged In' })
     }

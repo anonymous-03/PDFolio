@@ -1,5 +1,5 @@
 // import { useState } from 'react'
-import LandingPage from './pages/Home'
+import LandingPage from './Pages/Home.jsx'
 import './App.css'
 // import ToastContextProvider from './context/ToastContextProvider'
 import { createBrowserRouter, createRoutesFromElements, Route, RouterProvider, Routes } from 'react-router-dom'

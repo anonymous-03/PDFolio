@@ -1,39 +1,26 @@
 // contexts/AuthContext.jsx
-import React, { createContext, useState, useContext, useEffect, useCallback, useMemo } from 'react';
-import axios from 'axios';
+import React, { createContext, useState, useContext, useEffect } from 'react';
+import api from '../api';
 
-// Configure axios instance for session-based auth
+// Configure axios defaults
 const API_BASE_URL = import.meta.env.VITE_APP_API_URL || 'http://localhost:5000';
+// axios.defaults.baseURL = API_BASE_URL;
+// axios.defaults.withCredentials = true; // Important for cookies/sessions
 
-const axiosInstance = axios.create({
-  baseURL: API_BASE_URL,
-  withCredentials: true, // Essential for session cookies
-  headers: {
-    'Content-Type': 'application/json',
-  },
-});
-
-// Response interceptor to handle auth errors
-axiosInstance.interceptors.response.use(
-  (response) => response,
-  async (error) => {
-    if (error.response?.status === 401) {
-      // Only redirect if not already on auth pages
-      const authPaths = ['/login', '/auth/callback', '/auth/error'];
-      const currentPath = window.location.pathname;
-      
-      if (!authPaths.some(path => currentPath.includes(path))) {
-        window.location.href = '/login';
-      }
+// Add auth token to all requests if it exists
+api.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem('authToken');
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
     }
-    return Promise.reject(error);
-  }
+    return config;
+  },
+  (error) => Promise.reject(error)
 );
 
-// Create context
-export const AuthContext = createContext(null);
+export const AuthContext = createContext({});
 
-// Custom hook
 export const useAuth = () => {
   const context = useContext(AuthContext);
   if (!context) {
@@ -42,236 +29,151 @@ export const useAuth = () => {
   return context;
 };
 
-// Auth Provider Component
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Check if user is authenticated via session
-  const checkAuth = useCallback(async () => {
-    try {
-      setLoading(true);
-      setError(null);
 
-      // Check session with backend
-      const { data } = await axiosInstance.get('/api/auth/me');
-      
-      if (data.success && data.user) {
-        setUser(data.user);
+  const checkAuthStatus = async () => {
+    try {
+      setError(null);
+      const token = localStorage.getItem('authToken');
+
+      if (!token) {
+        setLoading(false);
+        return;
+      }
+
+      // Verify token with backend and get user profile
+      const response = await api.get('/api/auth/me');
+
+      if (response.data.success && response.data.user) {
+        setUser(response.data.user);
       } else {
+        // Token is invalid, remove it
+        localStorage.removeItem('authToken');
         setUser(null);
       }
-    } catch (err) {
-      console.error('Auth check failed:', err);
-      setUser(null);
-      
-      // Don't set error for 401s as it's expected when not logged in
-      if (err.response?.status !== 401) {
-        setError(err.response?.data?.message || 'Authentication check failed');
+    } catch (error) {
+      console.error('Auth check failed:', error);
+
+      // If unauthorized, clear token
+      if (error.response?.status === 401) {
+        localStorage.removeItem('authToken');
+        setUser(null);
       }
+
+      setError(error.response?.data?.message || 'Authentication check failed');
     } finally {
       setLoading(false);
     }
-  }, []);
+  };
 
-  // Initialize OAuth login
-  const login = useCallback((provider = 'google') => {
+  const loginWithOAuth = (provider = 'google') => {
     try {
       setError(null);
-      
-      // Store current location for post-login redirect
-      const currentPath = window.location.pathname;
-      if (currentPath !== '/login' && currentPath !== '/') {
-        sessionStorage.setItem('authRedirectUrl', currentPath);
+      // Store the current URL to redirect back after login
+      if(window.location.pathname !== '/login') {
+        sessionStorage.setItem('redirectUrl', window.location.pathname);
       }
 
-      // Redirect to OAuth provider through backend
-      window.location.href = `${API_BASE_URL}/api/auth/login/${provider}`;
-    } catch (err) {
-      console.error('Login failed:', err);
+      // Redirect to backend OAuth endpoint
+      window.location.href = `${API_BASE_URL}/auth/login/${provider}`;
+    } catch (error) {
+      console.error('OAuth login initiation failed:', error);
       setError('Failed to initiate login');
     }
-  }, []);
+  };
 
-  // Handle post-OAuth redirect (no token needed)
-  const handleAuthSuccess = useCallback(async () => {
+  const handleOAuthCallback = async (token) => {
     try {
       setLoading(true);
       setError(null);
 
-      // Fetch user profile using session
-      const { data } = await axiosInstance.get('/api/auth/me');
-      
-      if (data.success && data.user) {
-        setUser(data.user);
-        
-        // Get redirect URL or default to dashboard
-        const redirectUrl = sessionStorage.getItem('authRedirectUrl') || '/dashboard';
-        sessionStorage.removeItem('authRedirectUrl');
-        
-        return { success: true, redirectUrl };
+      // Store the token
+      localStorage.setItem('authToken', token);
+
+      // Fetch user profile with the new token
+      const response = await api.get('/api/auth/me', {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+      console.log(response);
+      if (response.data.success && response.data.user) {
+        setUser(response.data.user);
+
+        // Redirect to dashboard or previously stored URL
+        const redirectUrl = sessionStorage.getItem('redirectUrl') || '/dashboard';
+        sessionStorage.removeItem('redirectUrl');
+        window.location.href = redirectUrl;
       } else {
         throw new Error('Failed to fetch user profile');
       }
-    } catch (err) {
-      console.error('Auth success handling failed:', err);
+    } catch (error) {
+      console.error('OAuth callback handling failed:', error);
+      setError(error.response?.data?.message || 'Authentication failed');
+      localStorage.removeItem('authToken');
       setUser(null);
-      setError(err.response?.data?.message || 'Authentication failed');
-      return { success: false, error: err.message };
     } finally {
       setLoading(false);
     }
-  }, []);
+  };
 
-  // Handle OAuth errors
-  const handleAuthError = useCallback((errorMessage) => {
-    setError(errorMessage || 'Authentication failed');
-    setUser(null);
-    setLoading(false);
-  }, []);
-
-  // Logout
-  const logout = useCallback(async () => {
+  const logout = async () => {
     try {
       setLoading(true);
       setError(null);
 
-      // Call backend logout to destroy session
-      await axiosInstance.post('/api/auth/logout');
-    } catch (err) {
-      console.error('Logout error:', err);
-      // Continue with local cleanup even if backend fails
-    } finally {
-      // Clear local state
-      sessionStorage.clear();
+      // Call backend logout endpoint
+      await api.get('/api/auth/logout');
+
+      // Clear local state and storage
+      localStorage.removeItem('authToken');
       setUser(null);
-      setLoading(false);
-      
+
       // Redirect to home
       window.location.href = '/';
+    } catch (error) {
+      console.error('Logout failed:', error);
+      // Even if backend logout fails, clear local session
+      localStorage.removeItem('authToken');
+      setUser(null);
+      window.location.href = '/';
+    } finally {
+      setLoading(false);
     }
-  }, []);
+  };
 
-  // Refresh user data
-  const refreshUser = useCallback(async () => {
+  const refreshUserProfile = async () => {
     try {
       setError(null);
-      
-      const { data } = await axiosInstance.get('/api/auth/me');
-      
-      if (data.success && data.user) {
-        setUser(data.user);
-        return data.user;
+      const response = await api.get('/api/auth/me');
+
+      if (response.data.success && response.data.user) {
+        setUser(response.data.user);
+        return response.data.user;
       }
-      
-      throw new Error('Failed to refresh user data');
-    } catch (err) {
-      console.error('Refresh user failed:', err);
-      setError(err.response?.data?.message || 'Failed to refresh user data');
-      
-      if (err.response?.status === 401) {
-        setUser(null);
-      }
-      
-      throw err;
+    } catch (error) {
+      console.error('Failed to refresh user profile:', error);
+      setError(error.response?.data?.message || 'Failed to refresh profile');
+      throw error;
     }
-  }, []);
-
-  // Update user profile
-  const updateUser = useCallback(async (updates) => {
-    try {
-      setError(null);
-      
-      const { data } = await axiosInstance.patch('/api/auth/me', updates);
-      
-      if (data.success && data.user) {
-        setUser(data.user);
-        return data.user;
-      }
-      
-      throw new Error('Failed to update user');
-    } catch (err) {
-      console.error('Update user failed:', err);
-      setError(err.response?.data?.message || 'Failed to update user');
-      throw err;
-    }
-  }, []);
-
-  // Clear error
-  const clearError = useCallback(() => {
-    setError(null);
-  }, []);
-
-  // Check auth status on mount
-  useEffect(() => {
-    checkAuth();
-  }, [checkAuth]);
-
-  // Context value
-  const value = useMemo(() => ({
+  };
+   useEffect(() => {
+    checkAuthStatus();
+  }, [loginWithOAuth, logout, refreshUserProfile]);
+  const value = {
     user,
     loading,
     error,
-    isAuthenticated: !!user,
-    login,
+    loginWithOAuth,
+    handleOAuthCallback,
     logout,
-    handleAuthSuccess,
-    handleAuthError,
-    refreshUser,
-    updateUser,
-    checkAuth,
-    clearError,
-  }), [user, loading, error, login, logout, handleAuthSuccess, handleAuthError, refreshUser, updateUser, checkAuth, clearError]);
-
-  return (
-    <AuthContext.Provider value={value}>
-      {children}
-    </AuthContext.Provider>
-  );
-};
-
-// Hook for checking permissions
-export const usePermission = (permission) => {
-  const { user, isAuthenticated } = useAuth();
-  
-  return isAuthenticated && user?.permissions?.includes(permission);
-};
-
-// Hook for role-based access
-export const useRole = () => {
-  const { user, isAuthenticated } = useAuth();
-  
-  return {
-    hasRole: (role) => isAuthenticated && user?.role === role,
-    hasAnyRole: (roles) => isAuthenticated && roles.includes(user?.role),
-    isAdmin: isAuthenticated && user?.role === 'admin',
-    isSuperAdmin: isAuthenticated && user?.role === 'superadmin',
+    refreshUserProfile,
+    isAuthenticated: !!user
   };
-};
 
-// Protected Route Component
-export const ProtectedRoute = ({ children, requiredRole, requiredPermission }) => {
-  const { isAuthenticated, loading, user } = useAuth();
-  const { hasRole } = useRole();
-  const hasPermission = usePermission(requiredPermission);
-  
-  if (loading) {
-    return <div>Loading...</div>; // Replace with your loading component
-  }
-  
-  if (!isAuthenticated) {
-    window.location.href = '/login';
-    return null;
-  }
-  
-  if (requiredRole && !hasRole(requiredRole)) {
-    return <div>Access Denied: Insufficient Role</div>; // Replace with your 403 component
-  }
-  
-  if (requiredPermission && !hasPermission) {
-    return <div>Access Denied: Missing Permission</div>; // Replace with your 403 component
-  }
-  
-  return children;
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };

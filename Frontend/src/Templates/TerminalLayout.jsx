@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate,useParams } from 'react-router-dom';
-import axios from 'axios';
+import api from '../api';
 
 // Simple icon components
 const TerminalIcon = ({ size = 16 }) => (
@@ -199,7 +199,7 @@ const TerminalLayout = () => {
         return;
       }
       try {
-        const resumeData = await axios.get(`/api/resume-data/${pid}`);
+        const resumeData = await api.get(`/api/resume-data/${pid}`);
         if (resumeData) {
 
           setResumeData(resumeData.data);

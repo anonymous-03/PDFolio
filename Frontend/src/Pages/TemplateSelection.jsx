@@ -5,7 +5,6 @@ import { Monitor, Tablet, Smartphone, Check, Eye, ArrowRight, Loader } from 'rea
 import { useNavigate } from 'react-router-dom';
 import { ThemeContext } from '../context/ThemeContext';
 import { AuthContext, useAuth } from '../context/AuthContext';
-import axios from 'axios';
 import api from '../api';
 const templates = [
   {

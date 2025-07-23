@@ -19,6 +19,8 @@ import asyncWrap from './middlewares/asyncWrap.js';
 import ExpressError from './middlewares/ExpressError.js';
 import MongoStore from 'connect-mongo';
 
+app.set('trust proxy', 1);
+
 const corsOptions = {
     origin: process.env.REACT_APP_URL, 
     credentials: true, 
@@ -41,13 +43,14 @@ const store=MongoStore.create({
     }
 })
 const sessionObject = {
-    secret: 'Mycat',
+    secret: 'Mycatibdcbkjdsvjhsbdcjsdvjhsbvjhsbdvjkhsbdv',
     resave: false,
     saveUninitialized: false,
     store:store,
     cookie: {
         secure: false,
-        maxAge: 24 * 60 * 60 * 1000
+        sameSite: 'none',
+        maxAge: 7*24 * 60 * 60 * 1000
     }
 }
 app.use(session(sessionObject));
@@ -134,12 +137,12 @@ passport.use(new GoogleStrategy({
 app.get("/",(req,res)=>{
     res.send('Hii');
 })
-app.get('/api/auth/login/google', passport.authenticate('google'));
+app.get('/auth/login/google', passport.authenticate('google'));
 
 app.get('/oauth2/redirect/google',
     passport.authenticate('google', { failureRedirect: '/login', failureMessage: true }),
     function (req, res) {
-        res.redirect(`${process.env.REACT_APP_URL}/auth/callback`);
+        res.redirect(`${process.env.REACT_APP_URL}/auth/callback?token=${req.user.id}`);
     });
 
 app.get('/api/auth/logout',isLoggedIn, asyncWrap(async(req, res, next) => {
@@ -152,7 +155,6 @@ app.get('/api/auth/logout',isLoggedIn, asyncWrap(async(req, res, next) => {
 }));
 
 app.get("/api/auth/me",isLoggedIn, asyncWrap(async (req, res) => {
-    // console.log(req.session.passport);
     if (!req.session.passport) {
         return res.status(401).json({ 'message': 'Not logged In' })
     }
@@ -162,6 +164,7 @@ app.get("/api/auth/me",isLoggedIn, asyncWrap(async (req, res) => {
     if (!user) {
         return res.status(401).json({ 'error': 'user not found' });
     }
+
     return res.status(200).json({ "success": true, 'user': user });
 }));
 
@@ -195,7 +198,7 @@ app.post("/api/upload-resume",isLoggedIn, upload.single('resume'), asyncWrap(asy
 
 
 }))
-
+// Use POST for creating resources, not GET
 app.post("/api/portfolio/:template_name/:id",isLoggedIn,asyncWrap( async (req, res) => {
     try {
         const { template_name, id } = req.params;
@@ -203,7 +206,7 @@ app.post("/api/portfolio/:template_name/:id",isLoggedIn,asyncWrap( async (req, r
         // Use findById to get a single user document
         const user = await User.findById(id);
 
-        // console.log(user);
+        console.log(user);
 
         // Always check if the user was found before proceeding
         if (!user) {
@@ -251,9 +254,9 @@ app.get("/api/portfolios",isLoggedIn,asyncWrap( async (req, res) => {
     }
 
     const userId = req.user.id; 
-    // console.log(req.user.id);
+    console.log(req.user.id);
     const portfolios = await Portfolio.find({ id: userId });
-    // console.log(portfolios);
+    console.log(portfolios);
     return res.status(200).json(portfolios);
 
   } catch (err) {

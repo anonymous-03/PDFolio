@@ -5,7 +5,6 @@ import { Upload, FileText, X, CheckCircle, AlertCircle, Loader } from 'react-fea
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 import { ThemeContext } from '../context/ThemeContext';
-import axios from 'axios';
 import api from '../api';
 const ResumeUpload = () => {
   const [file, setFile] = useState(null);
@@ -83,13 +82,7 @@ const ResumeUpload = () => {
       formData.append('resume', file);
       const resumeData = await api.post('/api/upload-resume', formData);
 
-      // console.log(resumeData.data);
-      if(resumeData.data.personalInfo===undefined){
-        alert("Please upload resume again");
-        setUploading(false);
-        navigate('/upload');
-        return;
-      }
+      console.log(resumeData);
 
 
       // Simulate upload delay

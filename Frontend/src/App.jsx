@@ -1,11 +1,11 @@
-// import { useState } from 'react'
-import LandingPage from './Pages/Home.jsx'
+import { useState } from 'react'
+import LandingPage from './Pages/Home'
 import './App.css'
-// import ToastContextProvider from './context/ToastContextProvider'
+import ToastContextProvider from './context/ToastContextProvider'
 import { createBrowserRouter, createRoutesFromElements, Route, RouterProvider, Routes } from 'react-router-dom'
 import Login from './Pages/Login'
 import Dashboard from './Pages/Dashboard'
-// import UserProfile from './Pages/UserProfile'
+import UserProfile from './Pages/UserProfile'
 import './themes.css'
 import { ThemeProvider } from './context/ThemeContext'
 import ResumeUpload from './Pages/ResumeUpload'
@@ -18,9 +18,8 @@ import GalleryLayout from './Templates/GalleryLayout'
 import InfographicLayout from './Templates/InfographicLayout'
 import { AuthProvider } from './context/AuthContext'
 import OAuthCallback from './components/Auth/OAuthCallback'
-import PortfolioLink from './Pages/PortfolioLink.jsx'
+import PortfolioLink from './Pages/PortfolioLink'
 import ProtectedRoute from './components/Utils/ProtectedRoute'
-
 
 function App() {
   const router = createBrowserRouter(
@@ -29,7 +28,11 @@ function App() {
         <Route path='/' element={<LandingPage />} />
         <Route path='/login' element={<Login />} />
         <Route path='/dashboard' element={
+          <>
+            <ProtectedRoute>
               <Dashboard />
+            </ProtectedRoute>
+          </>
 
         } />
         {/* <Route path='/profile' element={<UserProfile />} /> */}
@@ -70,12 +73,12 @@ function App() {
 
   return (
     <AuthProvider>
-      {/* <ToastContextProvider> */}
+      <ToastContextProvider>
         <ThemeProvider>
           <RouterProvider router={router}>
           </RouterProvider>
         </ThemeProvider>
-      {/* </ToastContextProvider> */}
+      </ToastContextProvider>
     </AuthProvider>
 
   )

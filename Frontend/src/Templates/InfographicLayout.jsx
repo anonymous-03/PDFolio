@@ -8,7 +8,7 @@ import {
 import ContactForm from '../components/TemplateBlocks/ContactForm';
 import FooterBlock from '../components/TemplateBlocks/SocialLinks';
 import { useParams } from 'react-router-dom';
-import axios from 'axios';
+import api from '../api';
 import { useNavigate } from 'react-router-dom';
 
 
@@ -30,7 +30,7 @@ const InfographicLayout = () => {
         return;
       }
       try {
-        const response = await axios.get(`/api/resume-data/${pid}`);
+        const response = await api.get(`/api/resume-data/${pid}`);
         if (response.data) {
           setResumeData(response.data);
         }

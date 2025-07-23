@@ -8,7 +8,7 @@ import FooterBlock from '../components/TemplateBlocks/SocialLinks';
 import SummaryBlock from '../components/TemplateBlocks/Summary';
 import ContactForm from '../components/TemplateBlocks/ContactForm';
 import { useNavigate, useParams } from 'react-router-dom';
-import axios from 'axios';
+import api from '../api';
 const CascadeLayout = () => {
   const navigate = useNavigate();
   const [resumeData, setResumeData] = React.useState({});
@@ -26,7 +26,7 @@ const CascadeLayout = () => {
         return;
       }
       try {
-        const resumeData = await axios.get(`/api/resume-data/${pid}`);
+        const resumeData = await api.get(`/api/resume-data/${pid}`);
         if (resumeData) {
 
           setResumeData(resumeData.data);

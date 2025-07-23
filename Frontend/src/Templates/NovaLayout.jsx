@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { ChevronDown, MapPin } from 'react-feather';
 import { useNavigate, useParams } from 'react-router-dom';
-import axios from 'axios';
+import api from '../api';
 import ExperienceItem from '../components/TemplateBlocks/Experience';
 import ProjectCard from '../components/TemplateBlocks/Projects';
 import SkillsBlock from '../components/TemplateBlocks/Skills';
@@ -199,7 +199,7 @@ const NovaLayout = () => {
         return;
       }
       try {
-        const response = await axios.get(`/api/resume-data/${pid}`);
+        const response = await api.get(`/api/resume-data/${pid}`);
         if (response.data) {
           setResumeData(response.data);
         } else {

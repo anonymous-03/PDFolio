@@ -15,7 +15,7 @@ import {
 import { useNavigate } from 'react-router-dom';
 import { ThemeContext } from '../context/ThemeContext';
 import { AuthContext } from '../context/AuthContext';
-import axios from 'axios';
+
 
 const PortfolioLink = () => {
   const [copied, setCopied] = useState(false);
@@ -36,7 +36,7 @@ const PortfolioLink = () => {
       
       // Generate initial portfolio URL
       const baseUrl = window.location.origin;
-      const portfolioPath = `/portfolio/${templateData.name}/${user?._id || 'preview'}`;
+      const portfolioPath = `/portfolio/${templateData.id}/${user?._id || 'preview'}`;
       setPortfolioUrl(`${baseUrl}${portfolioPath}`);
     } else {
       navigate('/select-template');

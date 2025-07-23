@@ -9,7 +9,7 @@ import SkillsBlock from '../components/TemplateBlocks/Skills';
 import FooterBlock from '../components/TemplateBlocks/SocialLinks';
 import SummaryBlock from '../components/TemplateBlocks/Summary';
 import { useParams } from 'react-router-dom';
-import axios from 'axios';
+import api from '../api';
 import { useNavigate } from 'react-router-dom';
 
 const KyotoLayout = () => {
@@ -30,7 +30,7 @@ const KyotoLayout = () => {
         return;
       }
       try {
-        const response = await axios.get(`/api/resume-data/${pid}`);
+        const response = await api.get(`/api/resume-data/${pid}`);
         if (response.data) {
           setResumeData(response.data);
         }

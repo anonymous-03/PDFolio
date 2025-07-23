@@ -22,7 +22,6 @@ import {
   FiLogOut
 } from 'react-icons/fi';
 import { useAuth } from '../context/AuthContext';
-import axios from 'axios';
 import api from '../api';
 
 const Dashboard = () => {

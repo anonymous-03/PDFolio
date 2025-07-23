@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Grid, List, X, ArrowRight, ExternalLink, GitHub, Linkedin, Twitter } from 'react-feather';
 import { useParams, useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import api from '../api';
 import ExperienceItem from '../components/TemplateBlocks/Experience';
 import PersonalInfoBlock from '../components/TemplateBlocks/PersonalInfo';
 import ProjectCard from '../components/TemplateBlocks/Projects';
@@ -30,7 +30,7 @@ const GalleryLayout = () => {
         return;
       }
       try {
-        const response = await axios.get(`/api/resume-data/${pid}`);
+        const response = await api.get(`/api/resume-data/${pid}`);
         if (response.data) {
           setResumeData(response.data);
         }

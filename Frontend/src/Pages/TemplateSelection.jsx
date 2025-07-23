@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { ThemeContext } from '../context/ThemeContext';
 import { AuthContext, useAuth } from '../context/AuthContext';
 import axios from 'axios';
+import api from '../api';
 const templates = [
   {
     id: 'cascade',
@@ -110,7 +111,7 @@ const TemplateSelection = () => {
 
       await new Promise(resolve => setTimeout(resolve, 3000));
       // console.log(user);
-      const response=await axios.post(`/api/portfolio/${selectedTemplate.name}/${user?._id}`);
+      const response=await api.post(`/api/portfolio/${selectedTemplate.name}/${user?._id}`);
       // Redirect to customization page
       // console.log(response);
       navigate('/portfolio-link');

@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 import { ThemeContext } from '../context/ThemeContext';
 import axios from 'axios';
+import api from '../api';
 const ResumeUpload = () => {
   const [file, setFile] = useState(null);
   const [uploading, setUploading] = useState(false);
@@ -80,7 +81,7 @@ const ResumeUpload = () => {
       // console.log(file);
       const formData = new FormData();
       formData.append('resume', file);
-      const resumeData = await axios.post('/api/upload-resume', formData);
+      const resumeData = await api.post('/api/upload-resume', formData);
 
       // console.log(resumeData.data);
       if(resumeData.data.personalInfo===undefined){

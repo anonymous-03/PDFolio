@@ -8,7 +8,7 @@ import { SiLinkedin } from 'react-icons/si';
 import { useAuth } from '../context/AuthContext';
 
 const Login = () => {
-  const { loginWithOAuth } = useAuth();
+  const { login } = useAuth();
 
   
 
@@ -66,7 +66,7 @@ const Login = () => {
                   key={provider.provider}
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
-                  onClick={() => loginWithOAuth(provider.provider)}
+                  onClick={() => login(provider.provider)}
                   className={`w-full flex items-center justify-center gap-3 px-6 py-3 border border-gray-300 rounded-lg font-medium text-gray-700 transition-all ${provider.bgColor}`}
                 >
                   {provider.icon}

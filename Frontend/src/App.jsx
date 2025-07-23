@@ -29,11 +29,7 @@ function App() {
         <Route path='/' element={<LandingPage />} />
         <Route path='/login' element={<Login />} />
         <Route path='/dashboard' element={
-          <>
-            <ProtectedRoute>
               <Dashboard />
-            </ProtectedRoute>
-          </>
 
         } />
         {/* <Route path='/profile' element={<UserProfile />} /> */}

@@ -23,6 +23,7 @@ import {
 } from 'react-icons/fi';
 import { useAuth } from '../context/AuthContext';
 import axios from 'axios';
+import api from '../api';
 
 const Dashboard = () => {
   const { user,logout } = useAuth();
@@ -51,7 +52,7 @@ const Dashboard = () => {
     try {
       setLoading(true);
       setError(null);
-      const response = await axios.get('/api/portfolios');
+      const response = await api.get('/api/portfolios');
       // console.log(response.data);
       if (response.data) {
         setPortfolios(response.data);

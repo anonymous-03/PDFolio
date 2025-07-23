@@ -134,7 +134,7 @@ passport.use(new GoogleStrategy({
 app.get("/",(req,res)=>{
     res.send('Hii');
 })
-app.get('/auth/login/google', passport.authenticate('google'));
+app.get('/api/auth/login/google', passport.authenticate('google'));
 
 app.get('/oauth2/redirect/google',
     passport.authenticate('google', { failureRedirect: '/login', failureMessage: true }),
@@ -151,7 +151,8 @@ app.get('/api/auth/logout',isLoggedIn, asyncWrap(async(req, res, next) => {
   });
 }));
 
-app.get("/api/auth/me",asyncWrap(async (req, res) => {
+app.get("/api/auth/me",isLoggedIn, asyncWrap(async (req, res) => {
+    // console.log(req.session.passport);
     if (!req.session.passport) {
         return res.status(401).json({ 'message': 'Not logged In' })
     }
@@ -161,7 +162,6 @@ app.get("/api/auth/me",asyncWrap(async (req, res) => {
     if (!user) {
         return res.status(401).json({ 'error': 'user not found' });
     }
-
     return res.status(200).json({ "success": true, 'user': user });
 }));
 

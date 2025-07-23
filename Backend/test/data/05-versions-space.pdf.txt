@@ -1,0 +1,38 @@
+
+
+Nikhil Raj - Resume (Tailored for MasterCard SDE I)
++91-9341657526 | nikhil.work22@gmail.com
+github.com/anonymous-03 | linkedin.com/in/nikhil-raj-7a38a4250/
+Final Year B.Tech | NIT Silchar | CGPA: 8.16
+Open to: SDE | Full Stack | Backend Developer Roles
+Professional Summary
+Final-year  Computer  Science  student  at  NIT  Silchar  with  strong  problem-solving  skills  and  a  passion  for  building
+scalable  full-stack  applications.  Solved  over  1200+  DSA  problems  across  LeetCode  and  CodeChef.  Proficient  in  the
+MERN  stack,  with  hands-on  experience  in  building  production-ready  applications  and  working  with  RESTful  APIs,
+MongoDB, and Express.js. Seeking to contribute to high-impact projects as a Software Engineer I at MasterCard.
+Skills & Technologies
+Languages: C++, JavaScript (ES6+), SQL, MATLAB, R
+Frameworks/Libraries: React.js, Node.js, Express.js, Mongoose, Tailwind, EJS
+Databases: MongoDB, MySQL
+Tools: Git, GitHub, Figma, Postman, Vercel, Render
+Concepts: DSA, OOP, OS, DBMS, CN, Compiler Design, System Design
+Projects
+Track My Growth - Personal Analytics Platform
+- Built a full-stack analytics tool that integrates real-time coding data from platforms like LeetCode and CodeChef.
+- Designed REST APIs using Express.js, reducing latency by 35%.
+- Managed user progress for 100+ users with MongoDB.
+- Tech: MongoDB, Node.js, React.js, Chart.js, Express.js
+Wanderla - Property Listing Web App
+- Developed a property rental site with 100+ listings using EJS, Express.js, and MongoDB.
+- Integrated Passport.js for secure auth; implemented CRUD APIs with Express.
+- Reduced server response time by 30% via API optimizations.
+Achievements
+- Solved 1200+ DSA problems across LeetCode, CodeChef, and Codeforces
+- Ranked in Top 12.48% on LeetCode (Max Rating: 1708)
+- Top 4 Finalist at Code Clash (1200+ participants)
+- Ranked 5th in Enigma 36.0, NIT Silchar
+
+Nikhil Raj - Resume (Tailored for MasterCard SDE I)
+Education
+Bachelor of Technology in Computer Science and Engineering
+National Institute of Technology, Silchar | July 2022 - June 2026 | CGPA: 8.16

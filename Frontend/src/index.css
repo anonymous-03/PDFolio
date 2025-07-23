@@ -1,0 +1,267 @@
+/* src/index.css */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+@import 'tailwindcss';
+
+@layer base {
+  body {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
+
+@layer components {
+  .gradient-text {
+    background: linear-gradient(to right, #2563eb, #7c3aed);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  
+  .glass-effect {
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+  
+  .button-primary {
+    @apply px-8 py-4 text-white font-semibold rounded-full;
+    background: linear-gradient(to right, #2563eb, #1d4ed8);
+    box-shadow: 0 4px 14px 0 rgba(37, 99, 235, 0.25);
+    transition: all 0.3s ease;
+  }
+  
+  .button-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px 0 rgba(37, 99, 235, 0.35);
+  }
+  
+  .card-hover {
+    transition: all 0.3s ease;
+  }
+  
+  .card-hover:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(to bottom, #60a5fa, #3b82f6);
+  border-radius: 6px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(to bottom, #3b82f6, #2563eb);
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Selection color */
+::selection {
+  background: #3b82f6;
+  color: white;
+}
+
+::-moz-selection {
+  background: #3b82f6;
+  color: white;
+}
+
+/* Add to src/index.css */
+
+/* Animated gradient background */
+@keyframes gradientShift {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+.animated-gradient {
+  background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+  background-size: 400% 400%;
+  animation: gradientShift 15s ease infinite;
+}
+
+/* Pulse animation for dots */
+@keyframes pulse-dot {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 0.7;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.pulse-dot {
+  animation: pulse-dot 2s ease-in-out infinite;
+}
+
+/* Smooth appear animation */
+@keyframes appear {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-appear {
+  animation: appear 0.6s ease-out forwards;
+}
+
+/* Glow effect */
+@keyframes glow {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(59, 130, 246, 0.5);
+  }
+  50% {
+    box-shadow: 0 0 30px rgba(59, 130, 246, 0.8);
+  }
+}
+
+.glow-effect {
+  animation: glow 3s ease-in-out infinite;
+}
+
+/* How It Works */
+/* Add to src/index.css */
+
+/* Step indicator animations */
+@keyframes stepPulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 0.8;
+  }
+}
+
+.step-active {
+  animation: stepPulse 2s ease-in-out infinite;
+}
+
+/* Smooth transitions for interactive elements */
+.step-transition {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Gradient text animation */
+@keyframes gradientFlow {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.animated-gradient-text {
+  background: linear-gradient(-45deg, #3b82f6, #8b5cf6, #ec4899, #ef4444);
+  background-size: 300% 300%;
+  animation: gradientFlow 3s ease infinite;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Templates CSS */
+/* Add to src/index.css */
+
+/* Template card hover effects */
+.template-card {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.template-card:hover {
+  transform: translateY(-8px);
+}
+
+/* Color palette preview */
+.color-dot {
+  position: relative;
+  overflow: hidden;
+}
+
+.color-dot::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(45deg, transparent 40%, rgba(255,255,255,0.5) 50%, transparent 60%);
+  transform: translateX(-100%);
+  transition: transform 0.6s;
+}
+
+.color-dot:hover::after {
+  transform: translateX(100%);
+}
+
+/* Template preview animation */
+@keyframes slideUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.template-preview {
+  animation: slideUp 0.5s ease-out;
+}
+
+/* Device frame styles */
+.device-frame {
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Smooth scrollbar for preview modal */
+.preview-scrollbar::-webkit-scrollbar {
+  width: 8px;
+}
+
+.preview-scrollbar::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+.preview-scrollbar::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 4px;
+}
+
+.preview-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}

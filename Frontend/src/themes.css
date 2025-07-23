@@ -1,0 +1,309 @@
+/* themes.css */
+
+/* Import Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&family=Audiowide&family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;500;600;700&family=Caveat&family=Righteous&family=Exo+2:wght@300;400;700&family=Kalam&family=Poppins:wght@300;400;600;700&family=Space+Grotesk:wght@300;500;700&family=Space+Mono:wght@400;700&family=IBM+Plex+Mono:wght@400;700&family=VT323&family=Bodoni+Moda:wght@400;700;900&family=Crimson+Text&family=Amatic+SC:wght@400;700&family=Merriweather:wght@300;700&family=Open+Sans:wght@300;400;600;700&family=Montserrat:wght@400;600;700&display=swap');
+
+/* Base theme variables */
+:root {
+  /* Default colors - will be overridden by theme */
+  --color-primary: #3b82f6;
+  --color-secondary: #8b5cf6;
+  --color-accent: #f59e0b;
+  --color-background: #ffffff;
+  --color-surface: #f3f4f6;
+  --color-border: #e5e7eb;
+  
+  /* Typography */
+  --font-heading: 'Inter', sans-serif;
+  --font-body: 'Inter', sans-serif;
+  --font-accent: 'Inter', sans-serif;
+}
+
+/* Neon Cyberpunk Theme Specific Styles */
+.theme-neonCyberpunk {
+  font-family: var(--font-body);
+}
+
+.theme-neonCyberpunk h1,
+.theme-neonCyberpunk h2,
+.theme-neonCyberpunk h3,
+.theme-neonCyberpunk h4,
+.theme-neonCyberpunk h5,
+.theme-neonCyberpunk h6 {
+  font-family: var(--font-heading);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.theme-neonCyberpunk .neon-glow {
+  text-shadow: 
+    0 0 10px var(--color-primary),
+    0 0 20px var(--color-primary),
+    0 0 30px var(--color-primary),
+    0 0 40px var(--color-primary);
+}
+
+.theme-neonCyberpunk .neon-border {
+  box-shadow: 
+    0 0 10px var(--color-primary),
+    inset 0 0 10px var(--color-primary);
+  border: 1px solid var(--color-primary);
+}
+
+/* Glitch effect for Neon Cyberpunk */
+@keyframes glitch {
+  0% {
+    transform: translate(0);
+    opacity: 1;
+  }
+  20% {
+    transform: translate(-2px, 2px);
+    opacity: 0.8;
+  }
+  40% {
+    transform: translate(-2px, -2px);
+    opacity: 0.8;
+  }
+  60% {
+    transform: translate(2px, 2px);
+    opacity: 0.8;
+  }
+  80% {
+    transform: translate(2px, -2px);
+    opacity: 0.8;
+  }
+  100% {
+    transform: translate(0);
+    opacity: 1;
+  }
+}
+
+.theme-neonCyberpunk .glitch {
+  animation: glitch 2s infinite;
+}
+
+/* Minimalist Zen Theme Specific Styles */
+.theme-minimalistZen {
+  font-family: var(--font-body);
+}
+
+.theme-minimalistZen h1,
+.theme-minimalistZen h2,
+.theme-minimalistZen h3 {
+  font-family: var(--font-heading);
+  font-weight: 300;
+  letter-spacing: -0.02em;
+}
+
+.theme-minimalistZen .zen-shadow {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.theme-minimalistZen .zen-hover {
+  transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Retro Wave Theme Specific Styles */
+.theme-retroWave {
+  font-family: var(--font-body);
+}
+
+.theme-retroWave h1,
+.theme-retroWave h2 {
+  font-family: var(--font-heading);
+  font-style: italic;
+  background: var(--color-gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.theme-retroWave .retro-grid {
+  background-image: 
+    linear-gradient(rgba(255, 107, 157, 0.3) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 107, 157, 0.3) 1px, transparent 1px);
+  background-size: 50px 50px;
+}
+
+/* Scanlines effect */
+.theme-retroWave .scanlines::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    transparent 50%,
+    rgba(0, 0, 0, 0.1) 50%
+  );
+  background-size: 100% 4px;
+  pointer-events: none;
+  animation: scanlines 8s linear infinite;
+}
+
+@keyframes scanlines {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 0 10px;
+  }
+}
+
+/* Dark Glassmorphism Theme Specific Styles */
+.theme-darkGlassmorphism {
+  font-family: var(--font-body);
+}
+
+.theme-darkGlassmorphism .glass {
+  background: var(--color-glass-background);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid var(--color-glass-border);
+  box-shadow: var(--color-glass-shadow);
+}
+
+.theme-darkGlassmorphism .glass-hover:hover {
+  background: rgba(255, 255, 255, 0.08);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 48px 0 rgba(31, 38, 135, 0.5);
+}
+
+/* Tech Brutalist Theme Specific Styles */
+.theme-techBrutalist {
+  font-family: var(--font-body);
+}
+
+.theme-techBrutalist * {
+  border-radius: 0 !important;
+}
+
+.theme-techBrutalist h1,
+.theme-techBrutalist h2,
+.theme-techBrutalist h3 {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.theme-techBrutalist .brutal-border {
+  border: 3px solid var(--color-primary);
+}
+
+.theme-techBrutalist .brutal-shadow {
+  box-shadow: 5px 5px 0 var(--color-primary);
+}
+
+/* Noise texture */
+.theme-techBrutalist .noise {
+  position: relative;
+}
+
+.theme-techBrutalist .noise::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100'%3E%3Cfilter id='noise'%3E%3CfeTurbulence baseFrequency='0.9' /%3E%3C/filter%3E%3Crect width='100' height='100' filter='url(%23noise)' opacity='0.02'/%3E%3C/svg%3E");
+  pointer-events: none;
+  opacity: 0.05;
+}
+
+/* Artistic Gallery Theme Specific Styles */
+.theme-artisticGallery {
+  font-family: var(--font-body);
+}
+
+.theme-artisticGallery h1,
+.theme-artisticGallery h2 {
+  font-family: var(--font-heading);
+  font-weight: 300;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+}
+
+.theme-artisticGallery .gallery-frame {
+  border: 1px solid var(--color-border);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  padding: 20px;
+  background: white;
+}
+
+.theme-artisticGallery .gallery-hover {
+  transition: all 0.5s ease;
+}
+
+.theme-artisticGallery .gallery-hover:hover {
+  transform: scale(1.02);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+}
+
+/* Professional Corporate Theme Specific Styles */
+.theme-professionalCorporate {
+  font-family: var(--font-body);
+}
+
+.theme-professionalCorporate h1,
+.theme-professionalCorporate h2,
+.theme-professionalCorporate h3 {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  color: var(--color-text-primary);
+}
+
+.theme-professionalCorporate .corporate-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.theme-professionalCorporate .corporate-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transform: translateY(-2px);
+}
+
+.theme-professionalCorporate .corporate-button {
+  background: var(--color-gradient-primary);
+  color: white;
+  font-weight: 600;
+  letter-spacing: 0.025em;
+  transition: all 0.3s ease;
+}
+
+.theme-professionalCorporate .corporate-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(30, 58, 138, 0.3);
+}
+
+/* Utility classes for all themes */
+.theme-transition {
+  transition: all 0.3s ease;
+}
+
+/* Responsive typography adjustments */
+@media (max-width: 768px) {
+  :root {
+    font-size: 14px;
+  }
+}
+
+/* Dark mode adjustments for themes that support it */
+@media (prefers-color-scheme: dark) {
+  .theme-minimalistZen {
+    --color-background: #1a1a1a;
+    --color-surface: #2a2a2a;
+    --color-text-primary: #ffffff;
+    --color-text-secondary: #a0a0a0;
+  }
+  
+  .theme-professionalCorporate {
+    --color-background: #111827;
+    --color-surface: #1f2937;
+    --color-text-primary: #f9fafb;
+    --color-text-secondary: #d1d5db;
+  }
+}

@@ -195,7 +195,7 @@ app.post("/api/upload-resume",isLoggedIn, upload.single('resume'), asyncWrap(asy
 
 
 }))
-// Use POST for creating resources, not GET
+
 app.post("/api/portfolio/:template_name/:id",isLoggedIn,asyncWrap( async (req, res) => {
     try {
         const { template_name, id } = req.params;
@@ -203,7 +203,7 @@ app.post("/api/portfolio/:template_name/:id",isLoggedIn,asyncWrap( async (req, r
         // Use findById to get a single user document
         const user = await User.findById(id);
 
-        console.log(user);
+        // console.log(user);
 
         // Always check if the user was found before proceeding
         if (!user) {
@@ -251,9 +251,9 @@ app.get("/api/portfolios",isLoggedIn,asyncWrap( async (req, res) => {
     }
 
     const userId = req.user.id; 
-    console.log(req.user.id);
+    // console.log(req.user.id);
     const portfolios = await Portfolio.find({ id: userId });
-    console.log(portfolios);
+    // console.log(portfolios);
     return res.status(200).json(portfolios);
 
   } catch (err) {

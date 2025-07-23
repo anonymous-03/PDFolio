@@ -18,7 +18,7 @@ import GalleryLayout from './Templates/GalleryLayout'
 import InfographicLayout from './Templates/InfographicLayout'
 import { AuthProvider } from './context/AuthContext'
 import OAuthCallback from './components/Auth/OAuthCallback'
-import PortfolioLink from './Pages/Portfoliolink'
+import PortfolioLink from './Pages/PortfolioLink.jsx'
 import ProtectedRoute from './components/Utils/ProtectedRoute'
 
 

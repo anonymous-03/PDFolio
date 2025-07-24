@@ -19,7 +19,7 @@ import asyncWrap from './middlewares/asyncWrap.js';
 import ExpressError from './middlewares/ExpressError.js';
 import MongoStore from 'connect-mongo';
 
-app.set('trust proxy', 1);
+// app.set('trust proxy', 1);
 
 const corsOptions = {
     origin: process.env.REACT_APP_URL, 
@@ -42,17 +42,31 @@ const store=MongoStore.create({
         secret:"HelloWorld"
     }
 })
+
+
 const sessionObject = {
     secret: 'Mycatibdcbkjdsvjhsbdcjsdvjhsbvjhsbdvjkhsbdv',
     resave: false,
     saveUninitialized: false,
-    store:store,
+    store: store,
     cookie: {
-        secure: false,
-        sameSite: 'none',
-        maxAge: 7*24 * 60 * 60 * 1000
+        // Set secure to true in production, but false in development
+        secure: process.env.NODE_ENV === 'production', 
+        
+        // sameSite must be 'none' for cross-domain cookies in production
+        // but can be 'lax' in development
+        sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+
+        maxAge: 7 * 24 * 60 * 60 * 1000
     }
 }
+
+// You might need this for production if you are behind a proxy (like on Heroku, Render, etc.)
+if (process.env.NODE_ENV === 'production') {
+    app.set('trust proxy', 1); // trust first proxy
+}
+
+app.use(session(sessionObject));
 app.use(session(sessionObject));
 app.use(passport.initialize());
 app.use(passport.session());
@@ -97,7 +111,7 @@ passport.use(new GoogleStrategy({
                 subject: profile.id
             })
             // console.log(profile);
-            // console.log(cred);
+            console.log(cred);
             if (!cred) {
                 // Naya account hai;
                 const newUser = await User.create({
@@ -134,7 +148,7 @@ passport.use(new GoogleStrategy({
     }
 ));
 
-app.get("/",(req,res)=>{
+app.get("/login",(req,res)=>{
     res.send('Hii');
 })
 app.get('/auth/login/google', passport.authenticate('google'));
@@ -143,7 +157,7 @@ app.get('/oauth2/redirect/google',
     passport.authenticate('google', { failureRedirect: '/login', failureMessage: true }),
     function (req, res) {
         res.redirect(`${process.env.REACT_APP_URL}/auth/callback?token=${req.user.id}`);
-    });
+});
 
 app.get('/api/auth/logout',isLoggedIn, asyncWrap(async(req, res, next) => {
   req.logout(function(err) {

@@ -20,7 +20,7 @@ const OAuthCallback = () => {
       }
 
       if (token) {
-        console.log('OAuth token received:', token);
+        // console.log('OAuth token received:', token);
         await handleOAuthCallback(token);
       } else {
         navigate('/login?error=No token received');

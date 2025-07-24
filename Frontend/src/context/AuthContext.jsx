@@ -100,7 +100,7 @@ export const AuthProvider = ({ children }) => {
           Authorization: `Bearer ${token}`
         }
       });
-      console.log(response);
+      // console.log(response);
       if (response.data.success && response.data.user) {
         setUser(response.data.user);
 

@@ -4,6 +4,7 @@ import 'dotenv/config';
 import mongoose from 'mongoose';
 import cors from 'cors';
 import passport from 'passport';
+import jwt from 'jsonwebtoken';
 import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
 import User from './models/user.js'
 import Credentials from './models/credential.js';
@@ -39,29 +40,26 @@ const store=MongoStore.create({
     collectionName: "sessions",
     ttl: 14 * 24 * 60 * 60,
     crypto:{
-        secret:"HelloWorld"
+        secret:process.env.MONGO_SESSION_SECRET
     }
 })
 
 
 const sessionObject = {
-    secret: 'Mycatibdcbkjdsvjhsbdcjsdvjhsbvjhsbdvjkhsbdv',
+    secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
     store: store,
     cookie: {
-        // Set secure to true in production, but false in development
         secure: process.env.NODE_ENV === 'production', 
         
-        // sameSite must be 'none' for cross-domain cookies in production
-        // but can be 'lax' in development
         sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
 
         maxAge: 7 * 24 * 60 * 60 * 1000
     }
 }
 
-// You might need this for production if you are behind a proxy (like on Heroku, Render, etc.)
+
 if (process.env.NODE_ENV === 'production') {
     app.set('trust proxy', 1); // trust first proxy
 }
@@ -111,7 +109,7 @@ passport.use(new GoogleStrategy({
                 subject: profile.id
             })
             // console.log(profile);
-            console.log(cred);
+            // console.log(cred);
             if (!cred) {
                 // Naya account hai;
                 const newUser = await User.create({
@@ -149,14 +147,21 @@ passport.use(new GoogleStrategy({
 ));
 
 app.get("/login",(req,res)=>{
-    res.send('Hii');
+    res.redirect(`${process.env.REACT_APP_URL}/login`);
 })
 app.get('/auth/login/google', passport.authenticate('google'));
 
 app.get('/oauth2/redirect/google',
     passport.authenticate('google', { failureRedirect: '/login', failureMessage: true }),
     function (req, res) {
-        res.redirect(`${process.env.REACT_APP_URL}/auth/callback?token=${req.user.id}`);
+        const user = req.user;
+        // Token Bana lo
+        const token = jwt.sign(
+            { id: user.id, name: user.name }, 
+            process.env.JWT_SECRET, 
+            { expiresIn: '7d' } 
+        );
+        res.redirect(`${process.env.REACT_APP_URL}/auth/callback?token=${token}`);
 });
 
 app.get('/api/auth/logout',isLoggedIn, asyncWrap(async(req, res, next) => {
@@ -169,10 +174,7 @@ app.get('/api/auth/logout',isLoggedIn, asyncWrap(async(req, res, next) => {
 }));
 
 app.get("/api/auth/me",isLoggedIn, asyncWrap(async (req, res) => {
-    if (!req.session.passport) {
-        return res.status(401).json({ 'message': 'Not logged In' })
-    }
-    const userId = req.session.passport.user;
+    const userId = req.user.id;
     const user = await User.findById(userId);
 
     if (!user) {
@@ -197,7 +199,7 @@ app.post("/api/upload-resume",isLoggedIn, upload.single('resume'), asyncWrap(asy
         const resumeData = await generateContent(pdfText);
 
         // 3. Wo data ab MongoB ke user ke resume me save krna hai.....cloudinary wala part cancel kr diyaa hu
-        const userID = req.session.passport.user;
+        const userID = req.user.id;
         const user = await User.findById(userID);
         user.resume = resumeData;
 
@@ -220,7 +222,7 @@ app.post("/api/portfolio/:template_name/:id",isLoggedIn,asyncWrap( async (req, r
         // Use findById to get a single user document
         const user = await User.findById(id);
 
-        console.log(user);
+        // console.log(user);
 
         // Always check if the user was found before proceeding
         if (!user) {
@@ -268,9 +270,9 @@ app.get("/api/portfolios",isLoggedIn,asyncWrap( async (req, res) => {
     }
 
     const userId = req.user.id; 
-    console.log(req.user.id);
+    // console.log(req.user.id);
     const portfolios = await Portfolio.find({ id: userId });
-    console.log(portfolios);
+    // console.log(portfolios);
     return res.status(200).json(portfolios);
 
   } catch (err) {
@@ -278,6 +280,10 @@ app.get("/api/portfolios",isLoggedIn,asyncWrap( async (req, res) => {
     res.status(500).json({ message: 'Internal Server Error' });
   }
 }));
+
+app.get("/",(req,res)=>{
+    res.send("You are on Home route");
+})
 
 app.use((err,req,res,next)=>{
     if (res.headersSent) {

@@ -36,7 +36,7 @@ const PortfolioLink = () => {
       
       // Generate initial portfolio URL
       const baseUrl = window.location.origin;
-      const portfolioPath = `/portfolio/${templateData.id}/${user?._id || 'preview'}`;
+      const portfolioPath = `/portfolio/${templateData.name}/${user?._id || 'preview'}`;
       setPortfolioUrl(`${baseUrl}${portfolioPath}`);
     } else {
       navigate('/select-template');

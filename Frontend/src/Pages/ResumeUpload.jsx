@@ -82,7 +82,7 @@ const ResumeUpload = () => {
       formData.append('resume', file);
       const resumeData = await api.post('/api/upload-resume', formData);
 
-      console.log(resumeData);
+      // console.log(resumeData);
 
 
       // Simulate upload delay

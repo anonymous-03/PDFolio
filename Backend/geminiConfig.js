@@ -66,10 +66,10 @@ async function generateJson(pdfText) {
   ${pdfText}
 `;
   const response = await ai.models.generateContent({
-    model: 'gemini-2.5-pro',
+    model: 'gemini-2.5-flash',
     contents: prompt,
   });
-//   console.log(response.text);
+  
   const jsonObject = JSON.parse(response.text);
     
 return jsonObject;

@@ -194,9 +194,11 @@ app.post("/api/upload-resume",isLoggedIn, upload.single('resume'), asyncWrap(asy
         // 1. pehle pdf ko parse kr lete hai buffer memory se
         const pdfData = await pdf(req.file.buffer);
         const pdfText = pdfData.text;
-
+        // console.log(pdfText);
         // 2. ab gemini api ko data bhejnaa hai taaki proper json format me wapis de de
         const resumeData = await generateContent(pdfText);
+
+        // console.log(resumeData);
 
         // 3. Wo data ab MongoB ke user ke resume me save krna hai.....cloudinary wala part cancel kr diyaa hu
         const userID = req.user.id;

@@ -9,7 +9,8 @@ async function generateJson(pdfText) {
     const prompt = `
   You are an expert technical resume parser. Analyze the following resume text and convert it into a structured JSON object. 
   The JSON object must follow this exact schema, including all specified keys and data types. Be as accurate as possible.
-  No mistakes
+  No mistakes please. Just do this is the below specified JSON format
+  
 
   {
     "personalInfo": {

@@ -36,7 +36,7 @@ const Contact = () => {
       icon: <FiPhone className="w-6 h-6" />,
       title: 'Phone',
       content: '+91 8767298272',
-      link: 'tel:+91 8767298272
+      link: 'tel:+91 8767298272'
     },
     {
       icon: <FiMapPin className="w-6 h-6" />,

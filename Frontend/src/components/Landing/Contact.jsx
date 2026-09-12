@@ -29,19 +29,19 @@ const Contact = () => {
     {
       icon: <FiMail className="w-6 h-6" />,
       title: 'Email',
-      content: 'nikhil.work22@gmail.com',
-      link: 'mailto:nikhil.work22@gmail.com'
+      content: 'mimansha.clg@gmail.com',
+      link: 'mailto:mimansha.clg@gmail.com'
     },
     {
       icon: <FiPhone className="w-6 h-6" />,
       title: 'Phone',
-      content: '+91 9341657526',
-      link: 'tel:+91 9341657526'
+      content: '+91 8767298272',
+      link: 'tel:+91 8767298272
     },
     {
       icon: <FiMapPin className="w-6 h-6" />,
       title: 'Office',
-      content: 'NIT Silchar BH-6',
+      content: 'CUCEK',
       link: '#'
     },
     {
